@@ -5,6 +5,7 @@ import cz.visualio.citygame.model.News
 import cz.visualio.citygame.repositories.GroupRepository
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import java.util.logging.Level
 import java.util.logging.LogRecord
@@ -26,8 +27,8 @@ class GroupController(val repository: GroupRepository) {
     }
 
     @PostMapping("/group/")
-    fun postGroup(group: Group): Group? {
-        //logger.log(LogRecord(Level.INFO, "created group with id : "+group.id+"name :"+group.name+" by user id :"+group.owner.id))
+    fun postGroup(@RequestBody group: Group): Group? {
+        logger.log(LogRecord(Level.INFO, "created group with id : "+group.id+"name :"+group.name+" by user id :"+group.owner.id))
         return repository.save(group)
     }
 }

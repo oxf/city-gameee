@@ -2,6 +2,7 @@ package cz.visualio.citygame.model
 
 import cz.visualio.citygame.annotations.NoArg
 import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.mapping.Document
 import java.time.LocalDate
 import java.util.*
 import javax.persistence.Entity
@@ -11,12 +12,12 @@ import javax.persistence.GenerationType
 /**
  * Created by stanislav on 7/11/17.
  */
-@Entity
+@Document(collection = "news")
 @NoArg
 data class News(
-        var id: Long,
-        var title: String = "",
-        var body: String = "",
-        //var imageURL: String? = "",
+        @Id var id: Long,
+        var title: String,
+        var body: String,
+        var imageURL: String?,
         val date: LocalDate = LocalDate.now()
 )
