@@ -1,19 +1,23 @@
 package cz.visualio.citygame.model
 
 import cz.visualio.citygame.annotations.NoArg
+import cz.visualio.citygame.utlis.IdIncrementer
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
-@Document(collection = "group")
+
+
+val idIncGroup = IdIncrementer()
+@Document(collection = "groupCollection")
 @NoArg
 data class Group(
-        @Id var id: Long = 0,
-        val owner: User,
-        var name: String = ""/*,
-        val members: ArrayList<User> = ArrayList<User>(),
-        val conversation: Conversation*/
+        @Id val id: Long = idIncGroup.getNextId(),
+        var name: String,
+        val ownerId: Long,
+        var conversationId: Long,
+        val membersIds: List<Long> = ArrayList<Long>()
 ) {
 
 }
