@@ -14,4 +14,5 @@ import org.springframework.stereotype.Repository
 interface GroupRepository: MongoRepository<Group, Long> {
     fun findByOwner(ownerId: Long)
     fun deleteById(id: Long)
+    fun  findByName(name: String): Group?
 }

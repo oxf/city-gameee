@@ -15,12 +15,6 @@ class UserController() {
     @Autowired
     private lateinit var userDao: UserDAO
 
-    /*@GetMapping("/asdf")
-    fun test() {
-        userDao.myfun()
-    }
-    */
-
     val logger: Logger = Logger.getLogger("UserController")
 
     @GetMapping("/user")

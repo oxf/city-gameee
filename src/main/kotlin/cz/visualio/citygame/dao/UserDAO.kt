@@ -23,8 +23,9 @@ class UserDAO {
     }
 
     fun  save(user: User): User? {
-        userRepository.findOne(user.id)
-                ?: throw Exception("User with such id already exists")
+        if(userRepository.findOne(user.id)!=null) {
+            throw Exception("User with such id already exists")
+        }
         if(!user.username.isNullOrBlank()) throw Exception("Username cannot be empty")
         userRepository.findByUsername(user.username)
                 ?: throw Exception("Username is already taken")

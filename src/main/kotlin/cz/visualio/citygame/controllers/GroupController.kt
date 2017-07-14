@@ -26,18 +26,18 @@ class GroupController() {
 
     @GetMapping("/group")
     fun findAll(): MutableIterable<Group>? {
-        logger.log(LogRecord(Level.INFO, "Applied GET to ALL groups"))
+        logger.log(LogRecord(Level.INFO, "Applying GET to ALL groups"))
         return groupDAO.findAll()
     }
 
     @PostMapping("/group/")
     fun postGroup(@RequestBody group: Group): Group? {
-        logger.log(LogRecord(Level.INFO, "Created new GROUP : "+group.toString()))
+        logger.log(LogRecord(Level.INFO, "POSTing new GROUP"))
         return groupDAO.save(group)
     }
     @DeleteMapping("/group/{id}")
     fun removeGroup(@PathVariable("id") id: Long){
-        logger.log(LogRecord(Level.INFO, "DELETEed GROUP with id : "+id))
+        logger.log(LogRecord(Level.INFO, "DELETEing GROUP with id : "+id))
         return groupDAO.deleteById(id)
     }
     @PutMapping("/group/{id}")
@@ -45,6 +45,7 @@ class GroupController() {
             @PathVariable("id") id: Long,
             @RequestBody group: Group
     ): Group? {
+        logger.log(LogRecord(Level.INFO, "Applying PUT for GROUP with id : "+id))
         return groupDAO.edit(group)
     }
 
