@@ -28,16 +28,21 @@ class InviteController(val repository: InviteRepository, val groupRepository: Gr
     fun editInvite(
             @PathVariable id : Long,
             @RequestBody invite: Invite
-    ): Invite? {
+    ) {
         assert(invite.objId == id)
         if(invite.status==true) {
             //add user to group
             val group = groupRepository.findOne(invite.groupId)
             group.addMember(Member(invite.objId))
+            logger.log(LogRecord(Level.INFO, "USER with id : "+invite.objId+" was added to GROUP id : "+invite.groupId))
             group.invites.remove(invite.objId)
             groupRepository.save(group)
-            logger.log(LogRecord(Level.INFO, "USER with id : "+invite.objId+" was added to GROUP id : "+invite.groupId))
+            repository.delete(invite.id)
+            return repository.delete(invite)
+        } else if(invite.status==false) {
+            return repository.delete(invite)
         }
-        return repository.save(invite)
+        repository.save(invite)
+        return Unit
     }
 }

@@ -16,8 +16,8 @@ import javax.persistence.GenerationType
 @NoArg
 data class News(
         @Id var id: Long,
-        var title: String,
+        var title: String, //not empty
         var body: String,
         var imageURL: String?,
-        val date: LocalDate = LocalDate.now()
+        val date: LocalDate = LocalDate.now() //new type
 )

@@ -9,8 +9,6 @@ import javax.persistence.GeneratedValue
  */
 val idIncConv: IdIncrementer = IdIncrementer()
 data class Conversation(
-        @Id
-        @GeneratedValue
-        val id: Long = idIncConv.getNextId(),
+        @Id val id: Long = idIncConv.getNextId(),
         val messages_ids: List<Long> = ArrayList<Long>()
 )

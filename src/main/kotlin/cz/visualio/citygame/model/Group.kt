@@ -10,11 +10,11 @@ val idIncGroup = IdIncrementer()
 @NoArg
 data class Group(
         @Id val id: Long = idIncGroup.getNextId(),
-        var name: String,
-        val owner: Member,
+        var name: String, //not empty
+        val owner: Member, //valid
         var conversationId: Long,
         val members: MutableList<Member> = ArrayList<Member>(),
-        val invites: MutableList<Long> = ArrayList<Long>()
+        val invites: MutableList<Long> = ArrayList<Long>() //valid members
 ) {
     fun addMember(member: Member) {
         members.add(member)

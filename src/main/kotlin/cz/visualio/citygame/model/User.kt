@@ -11,7 +11,7 @@ import javax.persistence.GenerationType
 @Document(collection = "user")
 data class User(
         @Id var id: Long = 0,
-        var username: String = "",
-        var mail: String = "",
-        var password : String = ""
+        var username: String = "", //unique, not empty
+        var mail: String = "", //validate, not empty
+        var password : String = "" //not empty
 )

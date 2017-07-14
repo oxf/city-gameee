@@ -8,9 +8,7 @@ import javax.persistence.GenerationType
  * Created by stanislav on 7/11/17.
  */
 data class Message(
-        @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
-        var id: Long = 0,
-        val sender: User,
-        var text: String
+        @field: Id var id: Long = 0,
+        val senderId: Long,
+        var text: String //not empty
 )

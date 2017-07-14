@@ -47,16 +47,17 @@ class GroupController(val repository: GroupRepository, val conversationRepositor
             @PathVariable("id") id: Long,
             @RequestBody group: Group
     ) {
-            group.invites
+        group.invites
                 .filterNot { group.invites.contains(it) }
                 .forEach { inviteRepository.save(Invite(subjId = group.owner.userId, objId = it, groupId = group.id)) }
+        repository.save(group)
     }
 
-/*    @GetMapping("/group/ownedBy/{id}")
+/*    @GetMapping("/group/{id}/ownedBy/")
     fun getOwnedGroups(@PathVariable("id") id: Long) {
         repository.find
     }
-    @GetMapping("/group/memberedBy/{id}")
+    @GetMapping("/group/{id}/memberOfGroups")
     fun getMemberGroup(@PathVariable("id") id: Long) {
 
     }*/
