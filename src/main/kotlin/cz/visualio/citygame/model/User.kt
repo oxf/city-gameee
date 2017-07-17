@@ -15,5 +15,14 @@ data class User(
         @Id var id: Long = idIncUser.getNextId(),
         var username: String = "", //unique, not empty
         var mail: String = "", //validate, not empty
-        var password : String = "" //not empty
-)
+        var password : String = "", //not empty
+        val ownedGroupIds: MutableList<Long> = ArrayList<Long>(),
+        val memberedGroupIds: MutableList<Long> = ArrayList<Long>()
+) {
+    fun addOwnedGroup(id: Long) {
+        ownedGroupIds.add(id)
+    }
+    fun addMemberedGroup(id: Long) {
+        memberedGroupIds.add(id)
+    }
+}

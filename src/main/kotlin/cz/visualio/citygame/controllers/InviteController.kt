@@ -14,6 +14,8 @@ import java.util.logging.Logger
 
 /**
  * Created by stanislav on 7/13/17.
+ * Provides REST API for getting and editing invites
+ * creating is NOT ALLOWED, to create INVITE, edit GROUP, adding USERs ID to INVITES list in GROUP
  */
 
 @RestController
@@ -22,31 +24,25 @@ class InviteController() {
 
     @Autowired
     private lateinit var inviteDAO: InviteDAO
-
+    /**
+     * @return list of INVITEs that have as USER with
+     * @param id as object
+     */
     @GetMapping("/invite/{id}")
     fun getInvitesForUser(@PathVariable id : Long): MutableIterable<Invite>? {
         logger.log(LogRecord(Level.INFO, "applied GET to all invites for user with id = "+id))
         return inviteDAO.findByObjId(id)
     }
 
+    /**
+     * EDITs INVITE, in case of accept (resp. decline) DELETEs INVITE from DB and add USER to GROUP as MEMBER (resp. not adding)
+     * any other changes are not allowed, for INVITEing another USER edit group, adding USERs ID to invites list
+     */
     @PutMapping("/invite/{id}")
     fun editInvite(
             @PathVariable id : Long,
             @RequestBody invite: Invite
     ): Invite? {
-        /*if(invite.status==true) {
-            //add user to group
-            val group = groupRepository.findOne(invite.groupId)
-            group.addMember(Member(invite.objId))
-            logger.log(LogRecord(Level.INFO, "USER with id : "+invite.objId+" was added to GROUP id : "+invite.groupId))
-            group.invites.remove(invite.objId)
-            groupRepository.save(group)
-            repository.delete(invite.id)
-            return repository.delete(invite)
-        } else if(invite.status==false) {
-            return repository.delete(invite)
-        }*/
-
         return inviteDAO.edit(invite, id)
     }
 }

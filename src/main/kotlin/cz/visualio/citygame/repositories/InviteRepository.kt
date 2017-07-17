@@ -11,4 +11,5 @@ import org.springframework.stereotype.Repository
 interface InviteRepository: MongoRepository<Invite, Long> {
     fun findByObjId(objId: Long): MutableIterable<Invite>?
     fun findByGroupId(groupId: Long): MutableIterable<Invite>?
+    fun deleteByGroupId(groupId: Long)
 }

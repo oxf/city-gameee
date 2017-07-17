@@ -41,13 +41,14 @@ class UserDAO {
     }
 
     fun edit(user: User): User? {
-        userRepository.findOne(user.id)
-                ?: throw Exception("User with such id already exists")
+       /* userRepository.findOne(user.id)
+                ?: throw Exception("User with such id already exists")*/
         if (user.username.isNullOrBlank()) {
             throw Exception("Username cannot be empty")
         }
-        userRepository.findByUsername(user.username)
+        /*userRepository.findByUsername(user.username)
                 ?: throw Exception("Username is already taken")
+        */
         if (user.mail.isNullOrBlank()) {
             throw Exception("Mail cannot be empty")
         }

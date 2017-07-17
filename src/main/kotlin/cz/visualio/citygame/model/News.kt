@@ -12,6 +12,7 @@ import javax.persistence.GenerationType
 
 /**
  * Created by stanislav on 7/11/17.
+ * Domain model for news in feed
  */
 val idIncNews: IdIncrementer = IdIncrementer()
 @Document(collection = "news")

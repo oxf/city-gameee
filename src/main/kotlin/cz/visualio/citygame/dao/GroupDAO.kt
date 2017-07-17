@@ -57,7 +57,7 @@ class GroupDAO {
             groupInviteDAO.save(Invite(subjId = group.owner.userId, objId = i, groupId = group.id))
 
         }
-
+        userDAO.findOne(group.owner.userId)!!.addOwnedGroup(group.id)
         return groupRepository.save(group)
     }
 
@@ -90,12 +90,15 @@ class GroupDAO {
                 if(i.id)
             }
         }*/
-
-
         return groupRepository.save(group)
     }
 
     fun  findOne(groupId: Long): Group? {
         return groupRepository.findOne(groupId)
+    }
+
+    fun deleteByGroupId(id: Long) {
+        groupRepository.findOne(id) ?: throw Exception("No group woth such id")
+        return deleteByGroupId(id)
     }
 }

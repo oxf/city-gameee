@@ -49,5 +49,6 @@ class UserController() {
         logger.log(LogRecord(Level.INFO, "Applied PUT to user with id : "+id+" set :"+user.toString()))
         return userDao.edit(user)
     }
+
 }
 

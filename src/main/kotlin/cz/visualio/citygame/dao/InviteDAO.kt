@@ -2,6 +2,7 @@ package cz.visualio.citygame.dao
 
 import cz.visualio.citygame.model.Invite
 import cz.visualio.citygame.model.Member
+import cz.visualio.citygame.model.User
 import cz.visualio.citygame.repositories.InviteRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
@@ -56,6 +57,9 @@ class InviteDAO {
                 group.invites.remove(invite.objId) //remove invite from list in group
                 groupInviteDAO.save(group) //save group
                 inviteRepository.delete(invite.id) //remove invite from db
+                val newMember: User = userDAO.findOne(invite.objId) ?: throw Exception("User with such id not found")
+                newMember.addMemberedGroup(group.id) //add
+                userDAO.edit(newMember)
                 return null
             }
         } else if(invite.status==false) {
