@@ -7,18 +7,22 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
 import java.util.logging.Level
 import java.util.logging.LogRecord
+import java.util.logging.Logger
 
 /**
  * Created by stanislav on 7/14/17.
+ * Control of access to repository, verifying values,
  */
 @Repository
 class InviteDAO {
     @Autowired
     private lateinit var inviteRepository: InviteRepository
     @Autowired
-    private lateinit var groupDAO: GroupDAO
+    private lateinit var groupInviteDAO: GroupInviteDAOService
     @Autowired
     private lateinit var userDAO: UserDAO
+
+    val logger: Logger = Logger.getLogger("InviteDAO")
 
     fun  findByObjId(id: Long): MutableIterable<Invite>? {
         return inviteRepository.findByObjId(id)
@@ -29,7 +33,7 @@ class InviteDAO {
         if(inviteRepository.findOne(invite.id)!=null) {
             throw Exception("Invite with such id = "+invite.id+"already exists")
         }
-        if(groupDAO.findOne(invite.groupId)?.owner?.userId!=invite.subjId) {
+        if(groupInviteDAO.findOne(invite.groupId)?.owner?.userId!=invite.subjId) {
             throw Exception("Only owner can invite users to group")
         }
         userDAO.findOne(invite.objId)
@@ -37,18 +41,26 @@ class InviteDAO {
         return inviteRepository.save(invite)
     }
 
-    fun  edit(invite: Invite) : Invite? {
+    fun edit(invite: Invite, id: Long) : Invite? {
+        var oldInvite: Invite? = inviteRepository.findOne(id)
+        oldInvite ?: throw Exception("Invite with such id does not exist")
+        if((oldInvite.subjId!=invite.subjId)||(oldInvite.objId!=invite.objId)||(oldInvite.groupId!=invite.groupId)) {
+            throw Exception("You cant change invite params")
+        }
         if(invite.status==true) {
             //add user to group
-            val group = groupDAO.findOne(invite.groupId)
-            group?.addMember(Member(invite.objId))
-            logger.log(LogRecord(Level.INFO, "USER with id : "+invite.objId+" was added to GROUP id : "+invite.groupId))
-            group.invites.remove(invite.objId)
-            groupRepository.save(group)
-            repository.delete(invite.id)
-            return repository.delete(invite)
+            val group = groupInviteDAO.findOne(invite.groupId) //find group by id in invite
+            if(group != null) {
+                group?.addMember(Member(invite.objId)) //add user reference to group
+                logger.log(LogRecord(Level.INFO, "USER with id : " + invite.objId + " was added to GROUP id : " + invite.groupId))
+                group.invites.remove(invite.objId) //remove invite from list in group
+                groupInviteDAO.save(group) //save group
+                inviteRepository.delete(invite.id) //remove invite from db
+                return null
+            }
         } else if(invite.status==false) {
-            return repository.delete(invite)
+            inviteRepository.delete(invite.id)
+            return null
         }
         return inviteRepository.save(invite)
     }

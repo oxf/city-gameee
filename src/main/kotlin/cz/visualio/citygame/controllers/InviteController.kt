@@ -33,7 +33,7 @@ class InviteController() {
     fun editInvite(
             @PathVariable id : Long,
             @RequestBody invite: Invite
-    ) {
+    ): Invite? {
         /*if(invite.status==true) {
             //add user to group
             val group = groupRepository.findOne(invite.groupId)
@@ -46,7 +46,7 @@ class InviteController() {
         } else if(invite.status==false) {
             return repository.delete(invite)
         }*/
-        inviteDAO.edit(invite)
-        return Unit
+
+        return inviteDAO.edit(invite, id)
     }
 }

@@ -20,9 +20,9 @@ class GroupDAO {
     @Autowired
     private lateinit var conversationDAO: ConversationDAO
     @Autowired
-    private lateinit var inviteDAO: InviteDAO
+    private lateinit var groupInviteDAO: GroupInviteDAOService
     @Autowired
-    private lateinit var userRepository: UserRepository
+    private lateinit var userDAO: UserDAO
 
     fun findAll(): MutableIterable<Group>? {
         return groupRepository.findAll()
@@ -37,14 +37,14 @@ class GroupDAO {
         if (groupRepository.findByName(group.name) != null) {
             throw Exception("Group with such name already exists")
         }
-        userRepository.findOne(group.owner.userId)
+        userDAO.findOne(group.owner.userId)
                 ?: throw Exception("Owner does not exist")
         if (!group.members.isEmpty()) {
             throw Exception("Member list must be blank on create")
         }
         for (i in group.invites) {
-            userRepository.findOne(i)
-                    ?: throw Exception("Owner does not exist")
+            userDAO.findOne(i)
+                    ?: throw Exception("Invited user does not exist")
         }
 
         //create and add conversation
@@ -54,7 +54,7 @@ class GroupDAO {
 
         //invite users
         for (i in group.invites) {
-            inviteDAO.save(Invite(subjId = group.owner.userId, objId = i, groupId = group.id))
+            groupInviteDAO.save(Invite(subjId = group.owner.userId, objId = i, groupId = group.id))
 
         }
 
@@ -65,24 +65,25 @@ class GroupDAO {
         return groupRepository.deleteById(id)
     }
 
-
     fun edit(group: Group): Group? {
         //verify properties
         if (group.name.isNullOrBlank()) throw Exception("Group name cannot be empty")
         val possibleGroupWithSameName: Group? = groupRepository.findByName(group.name)
-        if ((possibleGroupWithSameName != null)) {
+        /*if ((possibleGroupWithSameName != null)) {                                       //same name??????
             throw Exception("Group with such name already exists")
         } else if(possibleGroupWithSameName === group) {
             throw Exception("Group with such name already exists")
-        }
-
-        userRepository.findOne(group.owner.userId)
+        }*/
+        userDAO.findOne(group.owner.userId)
                 ?: throw Exception("Owner does not exist")
-        //invite people
+
+        //create invites
         group.invites
-                .filter { inviteDAO.findByObjId(it) == null }
-                .forEach { inviteDAO.save(Invite(subjId = group.owner.userId, objId = it, groupId = group.id)) }
+                .filter { groupInviteDAO.findByObjId(it) == null }
+                .forEach { groupInviteDAO.save(Invite(subjId = group.owner.userId, objId = it, groupId = group.id)) }
         //delete invites ???????????////
+        //inviteDAO.findByGroupId(group.id)
+
         /*val inviteForGroup : MutableIterable<Invite>? = inviteDAO.findByGroupId(group.id)
         if(inviteForGroup!=null) {
             for(i in inviteForGroup) {

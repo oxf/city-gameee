@@ -1,6 +1,7 @@
 package cz.visualio.citygame.model
 
 import org.springframework.data.annotation.Id
+import java.time.LocalDateTime
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 
@@ -10,5 +11,6 @@ import javax.persistence.GenerationType
 data class Message(
         @field: Id var id: Long = 0,
         val senderId: Long,
-        var text: String //not empty
+        var text: String, //not empty
+        val date: LocalDateTime = LocalDateTime.now()
 )
