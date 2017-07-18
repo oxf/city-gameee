@@ -5,6 +5,8 @@ import org.springframework.data.repository.PagingAndSortingRepository
 
 /**
  * Created by stanislav on 7/17/17.
- */interface MessageRepository: PagingAndSortingRepository<Message, Long> {
+ * I chose PagingAndSortingRepository for comfortable sorting by publication time
+ */
+interface MessageRepository: PagingAndSortingRepository<Message, Long> {
 
 }

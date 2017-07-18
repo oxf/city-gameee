@@ -12,7 +12,7 @@ import java.util.logging.Logger
 
 /**
  * Created by stanislav on 7/14/17.
- * Control of access to repository, verifying values,
+ * Data access class to control ccess to repository, verifying values,
  */
 @Repository
 class InviteDAO {
@@ -25,11 +25,11 @@ class InviteDAO {
 
     val logger: Logger = Logger.getLogger("InviteDAO")
 
-    fun  findByObjId(id: Long): MutableIterable<Invite>? {
+    fun  findByObjId (id: Long): MutableIterable<Invite>? {
         return inviteRepository.findByObjId(id)
     }
 
-    fun  save(invite: Invite): Invite? {
+    fun save(invite: Invite): Invite? {
         //verify properties
         if(inviteRepository.findOne(invite.id)!=null) {
             throw Exception("Invite with such id = "+invite.id+"already exists")

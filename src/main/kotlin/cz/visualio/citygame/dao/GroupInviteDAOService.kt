@@ -32,5 +32,16 @@ class GroupInviteDAOService {
     fun  findByObjId(id: Long): MutableIterable<Invite>? {
         return inviteRepository.findByObjId(id)
     }
+    fun deleteByObjId(id: Long) {
+        return inviteRepository.deleteByObjId(id)
+    }
+
+    fun  findByGroupId(id: Long): MutableIterable<Invite>? {
+        return inviteRepository.findByGroupId(id)
+    }
+
+    fun  deleteOne(id: Long) {
+        return inviteRepository.delete(id)
+    }
 
 }

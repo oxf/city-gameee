@@ -13,5 +13,7 @@ class ConversationDAO {
     @Autowired
     private lateinit var conversationRepository: ConversationRepository
 
-    fun  save(conv: Conversation) {}
+    fun  save(conv: Conversation): Conversation? {
+        return conversationRepository.save(conv)
+    }
 }
